@@ -1,49 +1,25 @@
 import { config } from '../../config';
-import { Feature, FeatureDocument } from '../../interfaces/system';
+import { System, SystemDocument } from '../../interfaces/system';
 import { axios } from '../../utils/axios';
+import { faker } from '@faker-js/faker/locale/he';
 
 const { uri, baseRoute } = config.systems;
 
-
-
-export const exapleSystems = [
-    {
-        name: 'system1',
-        status: true
-    },
-    {
-        name: 'system2',
-        status: false
-    },
-    {
-        name: 'system3',
-        status: true
-    },
-    {
-        name: 'system4',
-        status: false
-    },
-    {
-        name: 'system5',
-        status: true
-    },
-    {
-        name: 'system6',
-        status: false
-    }
-,
-];
+export const exampleSystems = Array.from({ length: 6 }, () => ({
+    name: faker.company.name(),
+    status: faker.datatype.boolean(), // מחולל true/false רנדומלי
+}));
 
 export const getSystems = async () => {
-    const { data } = await axios.get<FeatureDocument[]>(uri + baseRoute, { params: config.getManyParams });
+    const { data } = await axios.get<SystemDocument[]>(uri + baseRoute, { params: config.getManyParams });
     return data;
 };
 
-const createSystem = async (system: Feature) => {
-    const { data } = await axios.post<FeatureDocument>(uri + baseRoute, system);
+const createSystem = async (system: System) => {
+    const { data } = await axios.post<SystemDocument>(uri + baseRoute, system);
     return data;
 };
 
 export const createSystems = () => {
-    return Promise.all(exapleSystems.map((system) => createSystem(system)));
+    return Promise.all(exampleSystems.map((system) => createSystem(system)));
 };
